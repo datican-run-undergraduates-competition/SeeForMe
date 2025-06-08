@@ -32,6 +32,9 @@ export default function Navbar() {
             <Link to="/" className="nav-link">
               Home
             </Link>
+             <Link to="/camera" className="nav-link">
+              Camera Assistant
+            </Link>
             <Link to="/color-blindness-tools" className="nav-link">
               Color Blindness Tools
             </Link>
@@ -93,6 +96,11 @@ export default function Navbar() {
               onClick={toggleMenu}
             >
               Home
+            </Link>
+            <Link to="/camera"  
+            className="mobile-nav-link"
+              onClick={toggleMenu}>
+              Camera Assistant
             </Link>
             <Link 
               to="/color-blindness-tools" 

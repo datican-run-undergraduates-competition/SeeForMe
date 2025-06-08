@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import { Volume2, VolumeX, Download, Share2, RefreshCw, Camera } from "lucide-react"
 import { getImageDescription } from "../services/geminiService"
@@ -13,25 +13,31 @@ function ImageResult() {
   const [audioEnabled, setAudioEnabled] = useState(true)
   const navigate = useNavigate()
   const location = useLocation()
+  const audioEnabledRef = useRef(audioEnabled)
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    audioEnabledRef.current = audioEnabled
+  }, [audioEnabled])
 
   // Speak a message for blind users
-  const speak = (message, callback) => {
-    if (!audioEnabled || !("speechSynthesis" in window)) return
+  const speak = useCallback((message, callback) => {
+    if (!audioEnabledRef.current || !("speechSynthesis" in window)) return
 
     window.speechSynthesis.cancel() // Stop any ongoing speech
 
     const utterance = new SpeechSynthesisUtterance(message)
     utterance.rate = 1.1 // Slightly faster than normal
 
-    if (callback) {
-      utterance.onend = callback
+    utterance.onstart = () => setIsSpeaking(true)
+    utterance.onend = () => {
+      setIsSpeaking(false)
+      if (callback) callback()
     }
-
-    setIsSpeaking(true)
-    utterance.onend = () => setIsSpeaking(false)
+    utterance.onerror = () => setIsSpeaking(false)
 
     window.speechSynthesis.speak(utterance)
-  }
+  }, [])
 
   useEffect(() => {
     // Retrieve the image and description from localStorage
@@ -54,7 +60,8 @@ function ImageResult() {
     } else {
       speak("Image description ready. Tap Read Aloud to hear the description.")
     }
-  }, [navigate, location.state])
+    // eslint-disable-next-line
+  }, [navigate, location.state, speak])
 
   const handleReadAloud = () => {
     if (description) {
@@ -140,10 +147,16 @@ function ImageResult() {
   }
 
   const toggleAudio = () => {
-    setAudioEnabled(!audioEnabled)
-    if (!audioEnabled) {
-      speak("Audio guidance turned on")
-    }
+    setAudioEnabled((prev) => {
+      const next = !prev
+      if (next) {
+        // Only speak if enabling audio
+        setTimeout(() => speak("Audio guidance turned on"), 100)
+      } else {
+        window.speechSynthesis.cancel()
+      }
+      return next
+    })
   }
 
   if (!image) {
@@ -210,7 +223,7 @@ function ImageResult() {
           <div className="grid grid-cols-3 gap-4">
             <button
               onClick={handleReadAloud}
-              disabled={isSpeaking}
+              disabled={isSpeaking || !audioEnabled}
               className={`flex items-center justify-center ${
                 isSpeaking ? "bg-green-700" : "bg-green-600 hover:bg-green-700"
               } text-white px-4 py-3 rounded-md`}

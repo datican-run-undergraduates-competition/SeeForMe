@@ -601,7 +601,7 @@ const NavigationAssistant = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6 max-w-3xl mx-auto">
+    <div className="flex flex-col gap-6 max-w-3xl md:mx-auto mx-6">
       {error && (
         <div className="flex items-center gap-2 p-3 rounded-md bg-red-100 text-red-700">
           <svg
@@ -668,7 +668,7 @@ const NavigationAssistant = () => {
           </div>
         </div>
 
-        <div className="relative aspect-[9/16] sm:aspect-video max-h-[50vh] w-full bg-black rounded-lg overflow-hidden">
+        <div className="relative aspect-[8/16] sm:aspect-video max-h-[50vh] w-full bg-black rounded-lg overflow-hidden">
           <video
             ref={videoRef}
             autoPlay
@@ -752,7 +752,7 @@ const NavigationAssistant = () => {
         </button>
 
 
-        <div className="p-4 bg-slate-100 rounded-lg">
+        <div className="p-4 rounded-lg">
           <h3 className="font-medium mb-1">Status:</h3>
           <p className="mb-2">
             {isSpeaking

@@ -30,7 +30,7 @@ export default function ColorBlindnessHome() {
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold mb-2">See the world through a more inclusive lens</h2>
         <p className="">
-          Upload an image or PDF to see how it looks for users with{" "}
+          Upload an image to see how it looks for users with{" "}
           <span className="text-blue-600 font-medium">Protanopia</span>,{" "}
           <span className="text-yellow-500 font-medium">Deuteranopia</span>,{" "}
           <span className="text-teal-500 font-medium">Tritanopia</span> or{" "}
@@ -53,18 +53,10 @@ export default function ColorBlindnessHome() {
             >
               Image
             </button>
-            <button
-              className={`px-4 py-1 rounded-full text-sm ${
-                activeTab === "document" ? "bg-teal-500 text-white" : "text-gray-700"
-              }`}
-              onClick={() => setActiveTab("document")}
-            >
-              Document
-            </button>
+            
           </div>
         </div>
 
-        {activeTab === "image" ? (
           <div className="max-w-sm g sm:max-w-5xl m-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
             <img
               src={Yelloweye || "/placeholder.svg"}
@@ -87,30 +79,6 @@ export default function ColorBlindnessHome() {
               onClick={() => handleExampleClick(Grayeye, "image")}
             />
           </div>
-        ) : (
-          <div className="max-w-sm sm:max-w-5xl m-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <img
-              src={Normaldoc || "/placeholder.svg"}
-              alt="Normal document"
-              className="w-full h-full bg-white border-gray-200 border-2 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
-              onClick={() => handleExampleClick(Normaldoc, "document")}
-            />
-
-            <img
-              src={Bluedoc || "/placeholder.svg"}
-              alt="Blue document simulation"
-              className="w-full h-full cursor-pointer hover:opacity-90 transition-opacity"
-              onClick={() => handleExampleClick(Bluedoc, "document")}
-            />
-
-            <img
-              src={Graydoc || "/placeholder.svg"}
-              alt="Gray document simulation"
-              className="w-full h-full cursor-pointer hover:opacity-90 transition-opacity"
-              onClick={() => handleExampleClick(Graydoc, "document")}
-            />
-          </div>
-        )}
       </div>
 
       <div className="flex flex-col md:flex-row items-center gap-8 mx-8">
